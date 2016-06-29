@@ -14,9 +14,16 @@
 # for more details.
 
 import ctypes, os, sys
-libcef_so = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), 'libcef.so')
+cur_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+libcef_so = os.path.join(cur_dir, 'libcef.so')
 if os.path.exists(libcef_so):
+    LD_LIBRARY_PATH = os.environ.get('LD_LIBRARY_PATH', None)
+    if not LD_LIBRARY_PATH:
+        LD_LIBRARY_PATH = cur_dir
+    else:
+        LD_LIBRARY_PATH += os.pathsep + cur_dir
+    os.putenv('LD_LIBRARY_PATH', LD_LIBRARY_PATH)
+    
     # Import local module
     ctypes.CDLL(libcef_so, ctypes.RTLD_GLOBAL)
     if 0x02070000 <= sys.hexversion < 0x03000000:

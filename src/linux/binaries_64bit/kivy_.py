@@ -489,8 +489,20 @@ class CefBrowser(Widget):
         touch.grab(self)
 
         y = self.height-touch.pos[1]
-        self.browser.SendMouseClickEvent(touch.x, y, cefpython.MOUSEBUTTON_LEFT,
-                                         mouseUp=False, clickCount=1)
+        if touch.is_double_tap:
+            self.browser.SendMouseClickEvent(
+                touch.x, y, cefpython.MOUSEBUTTON_RIGHT,
+                mouseUp=False, clickCount=1
+            )
+            self.browser.SendMouseClickEvent(
+                touch.x, y, cefpython.MOUSEBUTTON_RIGHT,
+                mouseUp=True, clickCount=1
+            )
+        else:
+            self.browser.SendMouseClickEvent(touch.x, y,
+                                             cefpython.MOUSEBUTTON_LEFT,
+                                             mouseUp=False, clickCount=1)
+
 
 
     def on_touch_move(self, touch, *kwargs):

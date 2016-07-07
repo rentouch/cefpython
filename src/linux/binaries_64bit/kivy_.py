@@ -157,14 +157,15 @@ class CefBrowser(Widget):
 
         #init CEF
         cefpython.WindowUtils.InstallX11ErrorHandlers()
-        cefpython.Initialize(settings)
+        cefpython.Initialize(settings,
+                             {"disable-gpu-compositing": "", })
 
         #WindowInfo offscreen flag
         windowInfo = cefpython.WindowInfo()
         windowInfo.SetAsOffscreen(0)
 
         #Create Broswer and naviagte to empty page <= OnPaint won't get called yet
-        browserSettings = {}
+        browserSettings = {"windowless_frame_rate": 60}
         # The render handler callbacks are not yet set, thus an
         # error report will be thrown in the console (when release
         # DCHECKS are enabled), however don't worry, it is harmless.
